@@ -11,31 +11,31 @@ export default class PostMenuFoldingButton extends Component {
   }
 
   static shouldRender(args) {
-    return args.state.currentUser?.whisperer;
+    return args.state.currentUser?.staff;
   }
 
   @service appEvents;
 
-  get isWhisper() {
-    return this.args.post.post_type === 4;
+  get isAction() {
+    return this.args.post.post_type === 3;
   }
 
   get title() {
     return themePrefix(
-      this.isWhisper
+      this.isAction
         ? "toggle_button_title.regular"
-        : "toggle_button_title.whisper"
+        : "toggle_button_title.action"
     );
   }
 
   get icon() {
-    return this.isWhisper ? "far-eye" : "far-eye-slash";
+    return this.isAction ? "far-bell-slash" : "far-bell";
   }
 
   @action
-  toggleWhisper() {
+  toggleAction() {
     const model = this.args.post;
-    let newType = model.post_type === 1 ? 4 : 1;
+    let newType = model.post_type === 3 ? 1 : 3;
     ajax(`/posts/${model.id}/post_type`, {
       type: "PUT",
       data: {
@@ -46,9 +46,9 @@ export default class PostMenuFoldingButton extends Component {
 
   <template>
     <DButton
-      class="toggle-whisper-btn"
+      class="toggle-action-btn"
       ...attributes
-      @action={{this.toggleWhisper}}
+      @action={{this.toggleAction}}
       @icon={{this.icon}}
       @title={{this.title}}
     />
